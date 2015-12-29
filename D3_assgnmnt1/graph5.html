@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="http://getbootstrap.com/examples/justified-nav/justified-nav.css" rel="stylesheet">
+
+    <style>
+        .axis path {
+            fill: none;
+            stroke: #777;
+            shape-rendering: crispEdges;
+        }
+        .axis text {
+            font-family: Lato;
+            font-size: 13px;
+        }
+        .legend {
+    font-size: 14px;
+    font-weight: bold;
+
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+      <h1>Arable land (hectares) for continents over the years(1960-2015)</h1>
+
+        <div class="jumbotron">
+          <svg id="visualisation" width="1200" height="500">
+            <rect x=990 y=10 width=20 height=20 fill=orange></rect><text x=1020 y=25 stroke=black>Asia</text>
+            <rect x=990 y=50 width=20 height=20 fill=yellow></rect><text x=1020 y=65 stroke=black>Africa</text>
+            <rect x=990 y=100 width=20 height=20 fill=red></rect><text x=1020 y=115 stroke=black>Oceania</text>
+            <rect x=990 y=150 width=20 height=20 fill=green></rect><text x=1020 y=165 stroke=black>South America</text>
+            <rect x=990 y=200 width=20 height=20 fill=blue></rect><text x=1020 y=215 stroke=black>Europe</text>
+            <rect x=990 y=250 width=20 height=20 fill=pink></rect><text x=1020 y=265 stroke=black>North America</text>
+          </svg>
+          <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+          <script>
+
+//           d3.json("output.txt", function(data) {
+// //plotGraph(data);
+//
+// //  console.log(data);
+// });
+
+d3.json("output4.txt", function(data1) {
+plotGraph(data1);
+  //console.log(data1[0]);
+});
+
+// d3.json("output2.txt", function(data2) {
+// //plotGraph(data2);
+// //  console.log(data2[0]);
+// });
+
+//console.log(json1);
+function plotGraph(json1) {
+
+          var vis = d3.select("#visualisation"),
+              WIDTH = 1000,
+              HEIGHT = 500,
+              MARGINS = {
+                  top: 50,
+                  right: 20,
+                  bottom: 50,
+                  left: 50
+              },
+              lSpace = WIDTH/6;
+              xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([d3.min(json1, function(d) {
+                  return d.year;
+              }), d3.max(json1, function(d) {
+                  return d.year;
+              })]),
+              yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([d3.min(json1, function(d) {
+                  return d.Africa;
+              }), d3.max(json1, function(d) {
+                  return d.Africa;
+              })]),
+              xAxis = d3.svg.axis()
+              .scale(xScale).tickFormat(d3.format("d")),
+              yAxis = d3.svg.axis()
+              .scale(yScale)
+              .orient("left");
+
+              vis.append("svg:g")
+                  .attr("class", "x axis")
+                  .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
+                  .call(xAxis);
+              vis.append("svg:g")
+                  .attr("class", "y axis")
+                  .attr("transform", "translate(" + (MARGINS.left) + ",0)")
+                  .call(yAxis);
+
+                  var lineGen = d3.svg.line()
+                      .x(function(d) {
+                          return xScale(d.year);
+                      })
+                      .y(function(d) {
+                          return yScale(d.Africa);
+                      })
+                      .interpolate("basis");
+
+
+                      vis.append('svg:path')
+                          .attr('d', lineGen(json1))
+                          .attr('stroke','yellow')
+                          .attr('stroke-width', 2)
+                          .attr('fill', 'none');
+
+
+                          var lineGen2 = d3.svg.line()
+                              .x(function(d) {
+                                  return xScale(d.year);
+                              })
+                              .y(function(d) {
+                                  return yScale(d.Asia);
+                              })
+                              .interpolate("basis");
+
+
+                              vis.append('svg:path')
+                                  .attr('d', lineGen2(json1))
+                                  .attr('stroke','orange')
+                                  .attr('stroke-width', 2)
+                                  .attr('fill', 'none');
+
+                          var lineGen3 = d3.svg.line()
+                                      .x(function(d) {
+                                          return xScale(d.year);
+                                      })
+                                      .y(function(d) {
+                                          return yScale(d.Europe);
+                                      })
+                                      .interpolate("basis");
+
+
+                                      vis.append('svg:path')
+                                          .attr('d', lineGen3(json1))
+                                          .attr('stroke','blue')
+                                          .attr('stroke-width', 2)
+                                          .attr('fill', 'none');
+                            var lineGen4 = d3.svg.line()
+                                              .x(function(d) {
+                                                  return xScale(d.year);
+                                              })
+                                              .y(function(d) {
+                                                  return yScale(d.Oceania);
+                                              })
+                                              .interpolate("basis");
+
+
+                                              vis.append('svg:path')
+                                                  .attr('d', lineGen4(json1))
+                                                  .attr('stroke','red')
+                                                  .attr('stroke-width', 2)
+                                                  .attr('fill', 'none');
+                                                      var lineGen5 = d3.svg.line()
+                                                                    .x(function(d) {
+                                                                        return xScale(d.year);
+                                                                    })
+                                                                    .y(function(d) {
+                                                                        return yScale(d["North America"]);
+                                                                    })
+                                                                    .interpolate("basis");
+
+
+                                                                    vis.append('svg:path')
+                                                                        .attr('d', lineGen5(json1))
+                                                                        .attr('stroke','pink')
+                                                                        .attr('stroke-width', 2)
+                                                                        .attr('fill', 'none');
+                                                    var lineGen6 = d3.svg.line()
+                                                                                          .x(function(d) {
+                                                                                              return xScale(d.year);
+                                                                                          })
+                                                                                          .y(function(d) {
+                                                                                              return yScale(d["South America"]);
+                                                                                          })
+                                                                                          .interpolate("basis");
+
+
+                                                                                          vis.append('svg:path')
+                                                                                              .attr('d', lineGen6(json1))
+                                                                                              .attr('stroke','green')                                                                              .attr('stroke-width', 2)
+                                                                                              .attr('fill', 'none');
+                      // vis.append('svg:path')
+                      //     .attr('d', lineGen(json2))
+                      //     .attr('stroke', 'blue')
+                      //     .attr('stroke-width', 2)
+                      //     .attr('fill', 'none');
+                      //     vis.append('svg:path')
+                      //         .attr('d', lineGen(json3))
+                      //         .attr('stroke', 'red')
+                      //         .attr('stroke-width', 2)
+                      //         .attr('fill', 'none');
+
+}
+          </script>
+</div>
+</div>
+</body>
+</html>
